@@ -15,7 +15,6 @@ const StyledBody = styled.section`
 export default class Body extends Component {
   render() {
     const { rows } = this.props;
-    console.log(rows);
     return (
       <StyledBody>
         {rows &&

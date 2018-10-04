@@ -1,23 +1,24 @@
-import React, { Component } from "react";
-import ReactDOM from "react-dom";
-import { DragDropContext } from "react-beautiful-dnd";
-import _ from "lodash";
-import nanoid from "nanoid";
-import ApolloClient from "apollo-boost";
-import { ApolloProvider, Query } from "react-apollo";
-import gql from "graphql-tag";
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import { DragDropContext } from 'react-beautiful-dnd';
+import _ from 'lodash';
+import nanoid from 'nanoid';
+import ApolloClient from 'apollo-boost';
+import { ApolloProvider, Query } from 'react-apollo';
+import gql from 'graphql-tag';
 
-import "./styles.css";
-import Header from "./Components/Header";
-import Footer from "./Components/Footer";
-import Body from "./Components/Body";
+import './styles.css';
+import Header from './Components/Header';
+import Footer from './Components/Footer';
+import Body from './Components/Body';
 
-import Rows from "../src/Utils/Rows";
-import Chips from "../src/Utils/Chips";
+import Rows from '../src/Utils/Rows';
+import Chips from '../src/Utils/Chips';
 
 const client = new ApolloClient({
   clientState: {
     defaults: {
+      Rows,
       Chips
     },
     resolvers: {}
@@ -26,6 +27,7 @@ const client = new ApolloClient({
 
 const STATE_QUERY = gql`
   {
+    Rows @client
     Chips @client
   }
 `;
@@ -44,14 +46,14 @@ class App extends Component {
 
     if (!destination) {
       return;
-    } else if (destination.droppableId === "footer") {
-      console.log("No action to take, dropping back in footer");
+    } else if (destination.droppableId === 'footer') {
+      console.log('No action to take, dropping back in footer');
       return;
     } else if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
     ) {
-      console.log("No action to take, source and destination are the same");
+      console.log('No action to take, source and destination are the same');
       return;
     }
 
@@ -67,11 +69,11 @@ class App extends Component {
 
     const newChip = _.cloneDeep(chip);
 
-    if (source.droppableId === "footer") {
+    if (source.droppableId === 'footer') {
       newChip.id = nanoid();
     }
 
-    if (source.droppableId !== "footer") {
+    if (source.droppableId !== 'footer') {
       sourceColumn.splice(source.index, 1);
       state[source.droppableId] = sourceColumn;
     }
@@ -103,5 +105,5 @@ class App extends Component {
   }
 }
 
-const rootElement = document.getElementById("root");
+const rootElement = document.getElementById('root');
 ReactDOM.render(<App />, rootElement);
