@@ -1,0 +1,24 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  max-width: 411px;
+  font-size: 10px;
+  font-family: "Roboto", sans-serif;
+  margin: auto;
+}
+
+#root {
+  height: 100vh;
+}
+
+h1 {
+  font-size: 3rem;
+  margin: 0;
+  color: #555555;
+}
+
+body {
+  margin: 0;
+}

@@ -1,0 +1,30 @@
+{
+  "name": "new",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "main": "src/index.js",
+  "dependencies": {
+    "@fortawesome/fontawesome": "^1.1.8",
+    "@fortawesome/fontawesome-free-solid": "^5.0.13",
+    "@fortawesome/react-fontawesome": "0.0.20",
+    "apollo-boost": "0.1.16",
+    "graphql": "14.0.2",
+    "graphql-tag": "2.10.0",
+    "lodash": "4.17.11",
+    "nanoid": "1.2.4",
+    "react": "16.4.2",
+    "react-apollo": "2.2.3",
+    "react-beautiful-dnd": "9.0.2",
+    "react-dom": "16.4.2",
+    "react-scripts": "1.1.4",
+    "styled-components": "3.4.9"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}

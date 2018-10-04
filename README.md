@@ -1,2 +1,0 @@
-# BarnBuddy
-Created with CodeSandbox
