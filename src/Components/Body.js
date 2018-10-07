@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import styled from "styled-components";
+import React, { Component } from 'react';
+import styled from 'styled-components';
 
-import Row from "./Row";
+import Row from './Row';
 
 const StyledBody = styled.section`
   width: 100%;
@@ -18,8 +18,14 @@ export default class Body extends Component {
     return (
       <StyledBody>
         {rows &&
-          Object.keys(rows).map((row, index) => (
-            <Row key={row} index={index} rowTitle={row} chips={rows[row]} />
+          rows.map((row, index) => (
+            <Row
+              key={row.id}
+              index={index}
+              rowTitle={row.label}
+              id={row.id}
+              chips={row.chips}
+            />
           ))}
       </StyledBody>
     );

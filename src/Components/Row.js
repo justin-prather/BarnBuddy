@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import styled from "styled-components";
+import React, { Component } from 'react';
+import styled from 'styled-components';
 
-import ChipContainer from "./ChipContainer";
+import ChipContainer from './ChipContainer';
 
 const StyledRow = styled.div`
   height: 7rem;
@@ -49,14 +49,14 @@ const StyledColumnRight = styled.div`
 
 export default class Row extends Component {
   render() {
-    const { rowTitle, chips } = this.props;
+    const { rowTitle, chips, id } = this.props;
     return (
       <StyledRow>
         <StyledColumnLeft>
           <span>{rowTitle}</span>
         </StyledColumnLeft>
         <StyledColumnRight>
-          <ChipContainer chips={chips} id={rowTitle} />
+          <ChipContainer chips={chips} id={id} />
         </StyledColumnRight>
       </StyledRow>
     );

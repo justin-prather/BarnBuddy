@@ -26,14 +26,22 @@ const client = new ApolloClient({
 });
 
 const STATE_QUERY = gql`
-  {
-    Rows @client
-    Chips @client
+  query STATE_QUERY {
+    Rows @client {
+      label
+      id
+      chips
+    }
+    Chips @client {
+      label
+      bgColor
+      id
+    }
   }
 `;
 
 class App extends Component {
-  state = Rows;
+  state = { Rows };
 
   constructor(props) {
     super(props);
@@ -42,7 +50,14 @@ class App extends Component {
 
   onDragEnd(result) {
     const { source, destination, draggableId } = result;
-    const { state } = this;
+    const { Rows } = this.state;
+
+    const [targetContainer] = Rows.filter(
+      row => row.id === (destination && destination.droppableId)
+    );
+    const [sourceContainer] = Rows.filter(
+      row => row.id === (source && source.droppableId)
+    );
 
     if (!destination) {
       return;
@@ -57,10 +72,12 @@ class App extends Component {
       return;
     }
 
-    const targetColumn = Array.from(state[destination.droppableId]);
+    const targetColumn = Array.from(targetContainer.chips);
     let sourceColumn = targetColumn;
     if (destination.droppableId !== source.droppableId) {
-      sourceColumn = Array.from(state[source.droppableId] || Chips);
+      sourceColumn = Array.from(
+        (sourceContainer && sourceContainer.chips) || Chips
+      );
     }
 
     const [chip] = sourceColumn.filter(
@@ -75,29 +92,29 @@ class App extends Component {
 
     if (source.droppableId !== 'footer') {
       sourceColumn.splice(source.index, 1);
-      state[source.droppableId] = sourceColumn;
+      sourceContainer.chips = sourceColumn;
+      const sourceIndex = Rows.indexOf(sourceContainer);
+      Rows.splice(sourceIndex, 1);
+      Rows.splice(sourceIndex, 0, sourceContainer);
     }
 
     targetColumn.splice(destination.index, 0, newChip);
 
-    state[destination.droppableId] = targetColumn;
+    targetContainer.chips = targetColumn;
 
-    this.setState(state);
+    const targetIndex = Rows.indexOf(targetContainer);
+    Rows.splice(targetIndex, 1);
+    Rows.splice(targetIndex, 0, targetContainer);
+
+    this.setState({ Rows });
   }
 
   render() {
     return (
       <ApolloProvider client={client}>
-        <Query query={STATE_QUERY}>
-          {({ loading, data }) => {
-            console.log(loading);
-            console.log(data);
-            return null;
-          }}
-        </Query>
         <Header />
         <DragDropContext onDragEnd={this.onDragEnd}>
-          <Body rows={this.state} />
+          <Body rows={Rows} />
           <Footer />
         </DragDropContext>
       </ApolloProvider>
