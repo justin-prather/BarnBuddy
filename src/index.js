@@ -4,8 +4,8 @@ import { DragDropContext } from 'react-beautiful-dnd';
 import _ from 'lodash';
 import nanoid from 'nanoid';
 import ApolloClient from 'apollo-boost';
-import { ApolloProvider, Query } from 'react-apollo';
-import gql from 'graphql-tag';
+import { ApolloProvider } from 'react-apollo';
+import moment from 'moment';
 
 import './styles.css';
 import Header from './Components/Header';
@@ -18,27 +18,11 @@ import Chips from '../src/Utils/Chips';
 const client = new ApolloClient({
   clientState: {
     defaults: {
-      Rows,
-      Chips
+      date: moment().valueOf()
     },
     resolvers: {}
   }
 });
-
-const STATE_QUERY = gql`
-  query STATE_QUERY {
-    Rows @client {
-      label
-      id
-      chips
-    }
-    Chips @client {
-      label
-      bgColor
-      id
-    }
-  }
-`;
 
 class App extends Component {
   state = { Rows };

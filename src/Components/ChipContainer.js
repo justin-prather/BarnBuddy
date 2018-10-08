@@ -1,16 +1,15 @@
-import React from "react";
-import styled from "styled-components";
-import { Droppable } from "react-beautiful-dnd";
-import nanoid from "nanoid";
+import React from 'react';
+import styled from 'styled-components';
+import { Droppable } from 'react-beautiful-dnd';
 
-import Chip from "./Chip";
+import Chip from './Chip';
 
 const StyledChipContainer = styled.div`
   display: flex;
   align-items: center;
   height: 60%;
   flex-grow: 1;
-  ${props => (props.empty ? "min-width: 100%;" : null)};
+  ${props => (props.empty ? 'min-width: 100%;' : null)};
 `;
 
 const ChipContainer = props => {

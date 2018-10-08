@@ -12,6 +12,7 @@
     "graphql": "14.0.2",
     "graphql-tag": "2.10.0",
     "lodash": "4.17.11",
+    "moment": "^2.22.2",
     "nanoid": "1.2.4",
     "react": "16.4.2",
     "react-apollo": "2.2.3",

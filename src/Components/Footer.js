@@ -1,10 +1,9 @@
-import React, { Component } from "react";
-import styled from "styled-components";
+import React, { Component } from 'react';
+import styled from 'styled-components';
 
-import Chip from "./Chip";
-import ChipContainer from "./ChipContainer";
+import ChipContainer from './ChipContainer';
 
-import Chips from "../Utils/Chips";
+import Chips from '../Utils/Chips';
 
 const StyledFooter = styled.header`
   width: 100%;
