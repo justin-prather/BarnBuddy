@@ -1,7 +1,6 @@
-# Unicorn Wrangler ✅
+## Name Ideas
 
-# Unicorn Pallette
-
-# EZ Coordinator
-
-# EZ Planner
+- Unicorn Wrangler ✅
+- Unicorn Pallette
+- EZ Coordinator
+- EZ Planner
