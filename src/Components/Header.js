@@ -19,6 +19,24 @@ const StyledHeader = styled.header`
   color: #555555;
 `;
 
+const StyledButton = styled.button`
+  font-size: inherit;
+  color: inherit;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0);
+
+  &:active {
+    border-style: none;
+  }
+
+  &:focus {
+    outline-style: none;
+  }
+`;
+
 const STATE_DATE = gql`
   query STATE_DATE {
     date @client
@@ -46,10 +64,11 @@ export default class Header extends Component {
           const reconstructedDate = moment(date);
           return (
             <StyledHeader>
-              <FontAwesomeIcon
-                icon={faAngleLeft}
+              <StyledButton
                 onClick={() => this.setDate(reconstructedDate, -1, client)}
-              />
+              >
+                <FontAwesomeIcon icon={faAngleLeft} />
+              </StyledButton>
               <h1>
                 {reconstructedDate.calendar(null, {
                   lastDay: '[Yesterday]',
@@ -60,10 +79,11 @@ export default class Header extends Component {
                   sameElse: 'DD/MM/YYYY'
                 })}
               </h1>
-              <FontAwesomeIcon
-                icon={faAngleRight}
+              <StyledButton
                 onClick={() => this.setDate(reconstructedDate, 1, client)}
-              />
+              >
+                <FontAwesomeIcon icon={faAngleRight} />
+              </StyledButton>
             </StyledHeader>
           );
         }}
