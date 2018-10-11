@@ -24,12 +24,15 @@ const client = new ApolloClient({
   }
 });
 
+export const removeChipContext = React.createContext();
+
 class App extends Component {
   state = { Rows };
 
   constructor(props) {
     super(props);
     this.onDragEnd = this.onDragEnd.bind(this);
+    this.removeChip = this.removeChip.bind(this);
   }
 
   onDragEnd(result) {
@@ -93,15 +96,33 @@ class App extends Component {
     this.setState({ Rows });
   }
 
+  removeChip(containerID, chipID) {
+    const { Rows } = this.state;
+
+    const [container] = Rows.filter(row => row.id === containerID);
+
+    const adjusted = container.chips.filter(item => item.id !== chipID);
+
+    container.chips = adjusted;
+
+    const containerIndex = Rows.indexOf(container);
+    Rows.splice(containerIndex, 1);
+    Rows.splice(containerIndex, 0, container);
+
+    this.setState({ Rows });
+  }
+
   render() {
     return (
-      <ApolloProvider client={client}>
-        <Header />
-        <DragDropContext onDragEnd={this.onDragEnd}>
-          <Body rows={Rows} />
-          <Footer />
-        </DragDropContext>
-      </ApolloProvider>
+      <removeChipContext.Provider value={this.removeChip}>
+        <ApolloProvider client={client}>
+          <Header />
+          <DragDropContext onDragEnd={this.onDragEnd}>
+            <Body rows={Rows} />
+            <Footer />
+          </DragDropContext>
+        </ApolloProvider>
+      </removeChipContext.Provider>
     );
   }
 }

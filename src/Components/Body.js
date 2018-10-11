@@ -25,6 +25,7 @@ export default class Body extends Component {
               rowTitle={row.label}
               id={row.id}
               chips={row.chips}
+              deletable
             />
           ))}
       </StyledBody>

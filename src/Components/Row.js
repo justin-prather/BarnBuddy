@@ -49,14 +49,14 @@ const StyledColumnRight = styled.div`
 
 export default class Row extends Component {
   render() {
-    const { rowTitle, chips, id } = this.props;
+    const { rowTitle, chips, id, deletable } = this.props;
     return (
       <StyledRow>
         <StyledColumnLeft>
           <span>{rowTitle}</span>
         </StyledColumnLeft>
         <StyledColumnRight>
-          <ChipContainer chips={chips} id={id} />
+          <ChipContainer chips={chips} id={id} deletable />
         </StyledColumnRight>
       </StyledRow>
     );

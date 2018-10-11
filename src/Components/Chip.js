@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import styled from "styled-components";
-import { Draggable } from "react-beautiful-dnd";
+import React, { Component } from 'react';
+import styled from 'styled-components';
+import { Draggable } from 'react-beautiful-dnd';
 
 const StyledChip = styled.div`
   height: 3rem;
   min-width: 4rem;
-  background-color: ${props => props.bgColor || "#ff5349"};
+  background-color: ${props => props.bgColor || '#ff5349'};
   box-shadow: 1px 2px 7px rgba(0, 0, 0, 0.25);
   border-radius: 14px;
   border: 1px solid #999999;
@@ -18,12 +18,13 @@ const StyledChip = styled.div`
 
   span {
     white-space: nowrap;
+    padding: 0 0.9rem;
   }
 `;
 
 export default class Chip extends Component {
   render() {
-    const { label, bgColor, index, id } = this.props;
+    const { label, bgColor, index, id, prefix, postfix } = this.props;
     return (
       <Draggable index={index} draggableId={id}>
         {provided => (
@@ -34,7 +35,9 @@ export default class Chip extends Component {
             bgColor={bgColor}
             className="chip"
           >
+            {prefix}
             <span>{label}</span>
+            {postfix}
           </StyledChip>
         )}
       </Draggable>
