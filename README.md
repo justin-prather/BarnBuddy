@@ -1,7 +1,7 @@
-#Unicorn Wrangler ✅
+# Unicorn Wrangler ✅
 
-#Unicorn Pallette
+# Unicorn Pallette
 
-#EZ Coordinator
+# EZ Coordinator
 
-#EZ Planner
+# EZ Planner
