@@ -56,7 +56,7 @@ export default class Row extends Component {
           <span>{rowTitle}</span>
         </StyledColumnLeft>
         <StyledColumnRight>
-          <ChipContainer chips={chips} id={id} deletable />
+          <ChipContainer chips={chips} id={id} deletable={deletable} />
         </StyledColumnRight>
       </StyledRow>
     );

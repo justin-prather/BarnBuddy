@@ -16,6 +16,7 @@ import Rows from '../src/Utils/Rows';
 import Chips from '../src/Utils/Chips';
 
 const client = new ApolloClient({
+  uri: 'https://api-uswest.graphcms.com/v1/cjmpof9zf1pcu01b9t3pnkqh6/master',
   clientState: {
     defaults: {
       date: moment().valueOf()
@@ -118,7 +119,7 @@ class App extends Component {
         <ApolloProvider client={client}>
           <Header />
           <DragDropContext onDragEnd={this.onDragEnd}>
-            <Body rows={Rows} />
+            <Body />
             <Footer />
           </DragDropContext>
         </ApolloProvider>

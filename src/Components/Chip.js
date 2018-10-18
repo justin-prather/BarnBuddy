@@ -24,7 +24,13 @@ const StyledChip = styled.div`
 
 export default class Chip extends Component {
   render() {
-    const { label, bgColor, index, id, prefix, postfix } = this.props;
+    const {
+      chipTemplate: { color, title },
+      index,
+      id,
+      prefix,
+      postfix
+    } = this.props;
     return (
       <Draggable index={index} draggableId={id}>
         {provided => (
@@ -32,11 +38,11 @@ export default class Chip extends Component {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             innerRef={provided.innerRef}
-            bgColor={bgColor}
+            bgColor={color}
             className="chip"
           >
             {prefix}
-            <span>{label}</span>
+            <span>{title}</span>
             {postfix}
           </StyledChip>
         )}
