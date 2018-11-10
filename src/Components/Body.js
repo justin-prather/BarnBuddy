@@ -25,6 +25,7 @@ const fetchHorses = gql`
         id
         date
         chipTemplate {
+          id
           title
           color
         }

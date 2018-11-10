@@ -6,6 +6,7 @@ import nanoid from 'nanoid';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
 import moment from 'moment';
+import gql from 'graphql-tag';
 
 import './styles.css';
 import Header from './Components/Header';
@@ -37,15 +38,45 @@ class App extends Component {
   }
 
   onDragEnd(result) {
-    const { source, destination, draggableId } = result;
-    const { Rows } = this.state;
+    const fetchHorses = gql`
+      query fetchHorses {
+        horses {
+          id
+          shortName
+          chips(where: { date: $date }) {
+            id
+            date
+            chipTemplate {
+              id
+              title
+              color
+            }
+          }
+        }
+      }
+    `;
 
-    const [targetContainer] = Rows.filter(
-      row => row.id === (destination && destination.droppableId)
-    );
-    const [sourceContainer] = Rows.filter(
-      row => row.id === (source && source.droppableId)
-    );
+    const newChip = gql`
+      mutation createChip($chipTemplate: ID!, $horse: ID!, $date: DateTime!) {
+        createChip(
+          data: {
+            chipTemplate: { connect: { id: $chipTemplate } }
+            horse: { connect: { id: $horse } }
+            date: $date
+          }
+        ) {
+          id
+          chipTemplate {
+            title
+            id
+            color
+          }
+          date
+          __typename
+        }
+      }
+    `;
+    const { source, destination, draggableId } = result;
 
     if (!destination) {
       return;
@@ -60,41 +91,122 @@ class App extends Component {
       return;
     }
 
-    const targetColumn = Array.from(targetContainer.chips);
-    let sourceColumn = targetColumn;
-    if (destination.droppableId !== source.droppableId) {
-      sourceColumn = Array.from(
-        (sourceContainer && sourceContainer.chips) || Chips
-      );
-    }
+    const { date } = client.readQuery({
+      query: gql`
+        query {
+          date @client
+        }
+      `
+    });
 
-    const [chip] = sourceColumn.filter(
-      chip => chip.idOG === draggableId || chip.id === draggableId
-    );
+    const { horses } = client.readQuery({
+      query: fetchHorses,
+      variables: {
+        date: moment(date)
+          .utc()
+          .startOf('day')
+          .toISOString()
+      }
+    });
 
-    const newChip = _.cloneDeep(chip);
-
+    // Need to create a new chip linked to this template
+    // The chip template id is ths chip id in thes case, see <Footer /> component
     if (source.droppableId === 'footer') {
-      newChip.id = nanoid();
+      const chipTemplate = draggableId;
+      const horse = destination.droppableId;
+      const date = moment(date)
+        .utc()
+        .startOf('day')
+        .toISOString();
+      client
+        .mutate({
+          mutation: newChip,
+          variables: {
+            chipTemplate,
+            horse,
+            date
+          },
+          refetchQueries: ['fetchHorses']
+          // update: (store, { data: { createChip } }) => {
+          //   const newHorses = _.cloneDeep(horses);
+          //   newHorses.forEach(horseObj => {
+          //     if (horseObj.id !== horse) {
+          //       return;
+          //     }
+          //     horseObj.chips.push(createChip);
+          //   });
+          //   console.log(newHorses);
+          //   store.writeQuery({
+          //     query: fetchHorses,
+          //     data: {
+          //       horses: newHorses
+          //     }
+          //   });
+          // }
+        })
+        .then(data => console.log(data));
     }
 
-    if (source.droppableId !== 'footer') {
-      sourceColumn.splice(source.index, 1);
-      sourceContainer.chips = sourceColumn;
-      const sourceIndex = Rows.indexOf(sourceContainer);
-      Rows.splice(sourceIndex, 1);
-      Rows.splice(sourceIndex, 0, sourceContainer);
-    }
+    // const Rows = horses;
 
-    targetColumn.splice(destination.index, 0, newChip);
+    // const [targetContainer] = Rows.filter(
+    //   row => row.id === (destination && destination.droppableId)
+    // );
+    // const [sourceContainer] = Rows.filter(
+    //   row => row.id === (source && source.droppableId)
+    // );
 
-    targetContainer.chips = targetColumn;
+    // if (!destination) {
+    //   return;
+    // } else if (destination.droppableId === 'footer') {
+    //   console.log('No action to take, dropping back in footer');
+    //   return;
+    // } else if (
+    //   destination.droppableId === source.droppableId &&
+    //   destination.index === source.index
+    // ) {
+    //   console.log('No action to take, source and destination are the same');
+    //   return;
+    // }
 
-    const targetIndex = Rows.indexOf(targetContainer);
-    Rows.splice(targetIndex, 1);
-    Rows.splice(targetIndex, 0, targetContainer);
+    // const targetColumn = Array.from(targetContainer.chips);
+    // let sourceColumn = targetColumn;
+    // if (destination.droppableId !== source.droppableId) {
+    //   sourceColumn = Array.from(
+    //     (sourceContainer && sourceContainer.chips) || Chips
+    //   );
+    // }
 
-    this.setState({ Rows });
+    // const [chip] = sourceColumn.filter(
+    //   chip => chip.idOG === draggableId || chip.id === draggableId
+    // );
+
+    // const newChip = _.cloneDeep(chip);
+
+    // if (source.droppableId === 'footer') {
+    //   // creating new chip rather than mutating old chip
+    // }
+
+    // if (source.droppableId !== 'footer') {
+    //   // change referenced horse or reorder
+    //   sourceColumn.splice(source.index, 1);
+    //   sourceContainer.chips = sourceColumn;
+    //   const sourceIndex = Rows.indexOf(sourceContainer);
+    //   Rows.splice(sourceIndex, 1);
+    //   Rows.splice(sourceIndex, 0, sourceContainer);
+    // }
+
+    // targetColumn.splice(destination.index, 0, newChip);
+
+    // targetContainer.chips = targetColumn;
+
+    // const targetIndex = Rows.indexOf(targetContainer);
+    // Rows.splice(targetIndex, 1);
+    // Rows.splice(targetIndex, 0, targetContainer);
+
+    // console.log(Horses);
+
+    // this.setState({ Rows });
   }
 
   removeChip(containerID, chipID) {
