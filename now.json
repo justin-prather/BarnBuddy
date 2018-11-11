@@ -1,5 +1,13 @@
 {
   "type": "static",
-  "alias": ["unicorn-wraneler"],
-  "version": 2
+  "static": {
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "alias": ["unicorn-wrangler"],
+  "version": 1
 }
