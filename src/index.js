@@ -132,17 +132,16 @@ class App extends Component {
     if (source.droppableId === 'footer') {
       const chipTemplate = draggableId;
       const horse = destination.droppableId;
-      const date = moment(date)
-        .utc()
-        .startOf('day')
-        .toISOString();
       client
         .mutate({
           mutation: newChip,
           variables: {
             chipTemplate,
             horse,
-            date
+            date: moment(date)
+              .utc()
+              .startOf('day')
+              .toISOString()
           },
           // ideally should use update instead of refetch queries here
           refetchQueries: ['fetchHorses']
