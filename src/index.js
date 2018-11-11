@@ -76,6 +76,24 @@ class App extends Component {
         }
       }
     `;
+
+    const reassignChip = gql`
+      mutation reassignChip($chip: ID!, $horse: ID!) {
+        updateChip(
+          data: { horse: { connect: { id: $horse } } }
+          where: { id: $chip }
+        ) {
+          id
+          chipTemplate {
+            title
+            id
+            color
+          }
+          date
+          __typename
+        }
+      }
+    `;
     const { source, destination, draggableId } = result;
 
     if (!destination) {
@@ -110,7 +128,7 @@ class App extends Component {
     });
 
     // Need to create a new chip linked to this template
-    // The chip template id is ths chip id in thes case, see <Footer /> component
+    // The chip template ID is ths chip id in thes case, see <Footer /> component
     if (source.droppableId === 'footer') {
       const chipTemplate = draggableId;
       const horse = destination.droppableId;
@@ -126,23 +144,24 @@ class App extends Component {
             horse,
             date
           },
+          // ideally should use update instead of refetch queries here
           refetchQueries: ['fetchHorses']
-          // update: (store, { data: { createChip } }) => {
-          //   const newHorses = _.cloneDeep(horses);
-          //   newHorses.forEach(horseObj => {
-          //     if (horseObj.id !== horse) {
-          //       return;
-          //     }
-          //     horseObj.chips.push(createChip);
-          //   });
-          //   console.log(newHorses);
-          //   store.writeQuery({
-          //     query: fetchHorses,
-          //     data: {
-          //       horses: newHorses
-          //     }
-          //   });
-          // }
+        })
+        .then(data => console.log(data));
+    } else {
+      // The chip is moving from one horse to another
+      // just reassign the horse id
+      const horse = destination.droppableId;
+      const chip = draggableId;
+      client
+        .mutate({
+          mutation: reassignChip,
+          variables: {
+            horse,
+            chip
+          },
+          // ideally should use update instead of refetch queries here
+          refetchQueries: ['fetchHorses']
         })
         .then(data => console.log(data));
     }
