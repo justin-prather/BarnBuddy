@@ -26,11 +26,14 @@ export default class Chip extends Component {
   render() {
     const {
       chipTemplate: { color, title },
+      specialTitle,
+      classOrder,
       index,
       id,
       prefix,
       postfix
     } = this.props;
+    const order = classOrder ? `${getOrdinal(classOrder)} - ` : null;
     return (
       <Draggable index={index} draggableId={id}>
         {provided => (
@@ -42,11 +45,17 @@ export default class Chip extends Component {
             className="chip"
           >
             {prefix}
-            <span>{title}</span>
+            <span>{`${order || ''}${specialTitle || title}`}</span>
             {postfix}
           </StyledChip>
         )}
       </Draggable>
     );
   }
+}
+
+function getOrdinal(n) {
+  var s = ['th', 'st', 'nd', 'rd'],
+    v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
 }

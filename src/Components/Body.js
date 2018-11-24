@@ -24,6 +24,9 @@ const fetchHorses = gql`
       chips(where: { date: $date }) {
         id
         date
+        specialTitle
+        classOrder
+        classLink
         chipTemplate {
           id
           title
